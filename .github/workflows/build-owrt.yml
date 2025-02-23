@@ -1,10 +1,15 @@
 
-name: test
+name: twrt
 
 on:
   schedule:
     - cron: "0 22 * * *"
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -175,6 +180,7 @@ jobs:
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
+        KERNEL_REPO_URL: https://github.com/ophub/kernel/releases/tag/kernel_flippy
         PACKAGE_SOC: s905d_s912
         KERNEL_AUTO_LATEST:  true
         KERNEL_VERSION_NAME: 6.1.84_6.6.25
@@ -199,27 +205,9 @@ jobs:
         removeArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          * ARMv8 精简固件.
           * Default IP: 192.168.1.1
           * Default username: root
           * Default password: password
-
-#    - name: Delete workflow runs
-#      uses: GitRML/delete-workflow-runs@main
-#      with:
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#        repository: ${{ github.repository }}
-#        retain_days: 1
-#        keep_minimum_runs: 5
-#
-#    - name: Remove old Releases
-#      uses: dev-drprasad/delete-older-releases@v0.2.0
-#      with:
-#        repo: ${{ github.repository }}
-#        keep_latest: 8
-#        delete_tags: true
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   x86-docker:
     name: x86d
@@ -390,28 +378,9 @@ jobs:
         removeArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          * x86 精简固件
-          * 有Docker
           * Default IP: 192.168.1.1
           * Default username: root
           * Default password: password
-
-#    - name: Delete workflow runs
-#      uses: GitRML/delete-workflow-runs@main
-#      with:
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#        repository: ${{ github.repository }}
-#        retain_days: 1
-#        keep_minimum_runs: 5
-#
-#    - name: Remove old Releases
-#      uses: dev-drprasad/delete-older-releases@v0.2.0
-#      with:
-#        repo: ${{ github.repository }}
-#        keep_latest: 8
-#        delete_tags: true
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   iwrt:
     name: iwrt
@@ -580,6 +549,7 @@ jobs:
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
+        KERNEL_REPO_URL: https://github.com/ophub/kernel/releases/tag/kernel_flippy
         PACKAGE_SOC: s905d_s912
         KERNEL_AUTO_LATEST:  true
         KERNEL_VERSION_NAME: 6.1.84_6.6.25
@@ -604,10 +574,6 @@ jobs:
         removeArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          * ARMv8 精简固件.
-          * Default IP: 192.168.1.1
-          * Default username: root
-          * Default password: password
           * Default IP: 192.168.1.1
           * Default username: root
           * Default password: password
@@ -781,8 +747,6 @@ jobs:
         removeArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          * x86 精简固件
-          * 有Docker
           * Default IP: 192.168.1.1
           * Default username: root
           * Default password: password
